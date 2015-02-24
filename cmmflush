@@ -1,0 +1,50 @@
+#! /bin/sh
+
+# Experimental routine to free up any available memory in Linux to reduce
+# the virtual machine footprint. Run this script before and after backups
+# and other out-of-line workload.
+
+psv='/proc/sys/vm'
+cmm() { cat $psv/cmm_pages; }
+freenow() { cat /proc/meminfo | grep ^MemFree: | sed 's/.* \([0-9]*\) kB/\1/' ; }
+timenow() { date | cut -b12-19; }
+
+# Get Linux to drop any cached data that can be missed, load the cmm
+# kernel module just in case. Get the min_free_kbytes threshold and
+# the current cmm floor
+
+oldfree=`freenow`
+echo "`timenow` Currently free $((oldfree/1024))MB, dropping cache..."
+echo 1 > $psv/drop_caches
+minfree=`cat $psv/min_free_kbytes`
+if [ ! -e "$psv/cmm_pages" ]; then
+  /sbin/modprobe cmm
+fi
+basecmm=`cmm`
+
+# Compute a good value for cmm_pages leaving some room for Linux
+# Set the cmm balloon and let the kernel run through releasing
+# all the pages.
+
+memfree=`freenow`
+echo "`timenow` Now free $((memfree/1024))MB, released $(((memfree-oldfree)/1024))MB"
+
+newcmm=$(((memfree-minfree*2)*95/400+basecmm))
+echo "`timenow` CMM base is $((basecmm/256))MB, target is $((newcmm/256))MB"
+
+echo $newcmm > $psv/cmm_pages
+curcmm=$basecmm
+while [ "$curcmm" -lt "$newcmm" ]; do
+  sleep 1
+  oldcmm=$curcmm
+  curcmm=`cmm`
+  if [ $curcmm -le $oldcmm ]; then
+    newcmm=$curcmm
+  fi
+  echo "`timenow` CMM currently at $((curcmm/256))MB..."
+done
+
+echo $basecmm > $psv/cmm_pages
+echo "`timenow` Done! CMM base restored to $((basecmm/256))MB"
+
+echo "`timenow` Released $(((newcmm-basecmm)/256)) MB of memory"
