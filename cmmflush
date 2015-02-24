@@ -29,6 +29,9 @@ basecmm=`cmm`
 memfree=`freenow`
 echo "`timenow` Now free $((memfree/1024))MB, released $(((memfree-oldfree)/1024))MB"
 
+# Compute new temporary setting for cmm_pages, divide KB's by 4
+# using a 95% threshold to avoid pushing too hard
+
 newcmm=$(((memfree-minfree*2)*95/400+basecmm))
 echo "`timenow` CMM base is $((basecmm/256))MB, target is $((newcmm/256))MB"
 
