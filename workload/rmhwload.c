@@ -110,7 +110,7 @@ int main (int argc, char **argv) {
         }
 
         if (runt<1) {
-                printf(stderr, "Invalid runtime %d\n", runt);
+                fprintf(stderr, "Invalid runtime %d\n", runt);
                 exit(1);
         }
         srand48(time(0) ^ getpid());
