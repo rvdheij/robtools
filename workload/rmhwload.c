@@ -11,7 +11,7 @@
 
 #include "poissinv.h"
 
-#define CPUPASS 514
+#define CPUPASS 420
 
 double runone(long *buf, int memsz, int memst, int *cursor, int cpulp, int verb) {
         int i, j;
@@ -31,7 +31,7 @@ double runone(long *buf, int memsz, int memst, int *cursor, int cpulp, int verb)
                                 p += memst;
                                 if (p >= memsz) p = 0;
                         }
-                        tot += j * sizeof(long) / 1024/1024;
+                        tot += (double) j * sizeof(long) / 1024/1024;
                 }
                 t2 = times(&c2);
                 if (verb) {
@@ -118,19 +118,22 @@ int main (int argc, char **argv) {
         memrange = memsz * 1024 / sizeof(long);
         long *buf = malloc(memrange * sizeof(long));
 
-        t1 = times(&tms1); t2 = t1;
+        t1 = times(&tms1); 
+	t2 = t1;
         int ticks = sysconf(_SC_CLK_TCK);
+	int pass = 0;
         while ((t2-t1) < runt * ticks) {
                 double mb = runone(buf, memrange, memst, &cursor, cpulp, verb);
                 mbs += mb;
                 thinksome(think, verb);
                 t2 = times(&tms2);
+		pass++;
         }
         double utime = (double) (tms2.tms_utime - tms1.tms_utime) / ticks;
         double stime = (double) (tms2.tms_stime - tms1.tms_stime) / ticks;
 
-        printf("Mem: %6d KB  User: %6.3f  Syst: %6.3f  BW: %8.1f \n",
-                memsz, utime, stime, mbs/utime);
+        printf("Mem: %6d KB  Pass: %8d  User: %6.3f  Syst: %6.3f  BW: %8.1f \n",
+                memsz, pass, utime, stime, mbs/utime);
 
         free(buf);
         return 0;
