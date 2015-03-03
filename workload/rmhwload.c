@@ -11,7 +11,7 @@
 
 #include "poissinv.h"
 
-#define CPUPASS 615000
+#define CPUPASS 514
 
 double runone(long *buf, int memsz, int memst, int *cursor, int cpulp, int verb) {
         int i, j;
@@ -46,15 +46,14 @@ double runone(long *buf, int memsz, int memst, int *cursor, int cpulp, int verb)
               return tot;
 }
 
-// Sleep for specified number of ticks (10 ms)
+// Sleep for time (poisson distributed around specified mean in ms) 
 void thinksome(int think, int verb) {
         struct timespec t1, t2;
-        long tick = sysconf(_SC_CLK_TCK);
         if (think == 0) sched_yield();
         else {
                 think = poissinv(think);
-                t1.tv_sec = think / tick;           // full seconds
-                t1.tv_nsec = (long) (think % tick) * 1000000000L / tick;
+                t1.tv_sec = think / 1000;           		// full seconds
+                t1.tv_nsec = (long) (think % 1000) * 1000000L;  // rest in ns
                 nanosleep(&t1, &t2);
         }
 }
