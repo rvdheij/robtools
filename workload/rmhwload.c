@@ -87,13 +87,13 @@ int main (int argc, char **argv) {
                 case 'm':                         // memory usage in MB
                         memsz = atoi(optarg) * 1024;
                         break;
-                case 's':
+                case 's':                         // Stride size
                         memst = atoi(optarg);
                         break;
                 case 'c':                         // CPU consumption
                         cpulp = atoi(optarg);
                         break;
-                case 't':
+                case 't':                         // Test runtime
                         runt = atoi(optarg);
                         break;
                 case 'v':
@@ -108,6 +108,11 @@ int main (int argc, char **argv) {
                         else
                                 fprintf (stderr, "Unknown option character `\\x%x'.\n", optopt);
                 }
+        }
+
+        if (runt<1) {
+                printf(stderr, "Invalid runtime %d\n", runt);
+                exit(1);
         }
         srand48(time(0) ^ getpid());
 
