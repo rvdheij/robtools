@@ -109,10 +109,6 @@ int main (int argc, char **argv) {
                 }
         }
 
-        if (runt<1) {
-                fprintf(stderr, "Invalid runtime %d\n", runt);
-                exit(1);
-        }
         srand48(time(0) ^ getpid());
 
         memrange = memsz * 1024 / sizeof(long);
@@ -122,13 +118,13 @@ int main (int argc, char **argv) {
 	t2 = t1;
         int ticks = sysconf(_SC_CLK_TCK);
 	int pass = 0;
-        while ((t2-t1) < runt * ticks) {
+	do {
                 double mb = runone(buf, memrange, memst, &cursor, cpulp, verb);
                 mbs += mb;
                 thinksome(think, verb);
                 t2 = times(&tms2);
 		pass++;
-        }
+        } while ((t2-t1) < runt * ticks);
         double utime = (double) (tms2.tms_utime - tms1.tms_utime) / ticks;
         double stime = (double) (tms2.tms_stime - tms1.tms_stime) / ticks;
 
