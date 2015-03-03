@@ -45,6 +45,11 @@ int main(int argc, char **argv)
 		}
 	}
 
+	if (lambda <= 0) {
+		fprintf(stderr, "Missing or invalid mean for distribution\n");
+		exit(1);
+	}
+
 	int res, i;
 	int maxnum = lambda * 3;
 	long *stat;
