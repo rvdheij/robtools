@@ -1,15 +1,17 @@
 #
-CC=gcc
 LIBS =
 INCLUDE = .
 
-CFLAGS = -g -O3 -Wall -Werror
+CFLAGS:=-g -O3 -Wall -Werror
 # LDFLAGS = -lrt -lcrypto
 
-all: poisson rmhwload
+M:=poisson rmhwload
+O:=poissinv.o
 
-poisson: poisson.o poissinv.o
-	$(CC) -o poisson poisson.o poissinv.o
+all: ${M} 
 
-rmhwload: rmhwload.o poissinv.o
-	$(CC) -o rmhwload rmhwload.o poissinv.o
+%.o: %.c
+	$(CC) -c $< ${CFLAGS}
+
+%: %.c
+	$(CC) -o $@ $< ${CFLAGS} ${O}
