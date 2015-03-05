@@ -1,12 +1,15 @@
 #
-CC=gcc
 LIBS =
 INCLUDE = .
 
-CFLAGS = -g -O3 -Wall -Werror
+CFLAGS:=-g -O3 -Wall -Werror
+LDFLAGS = -lrt
 
-all: minc drop 
+all: minc drop nocache.so 
 
 %: %.c
-	$(CC) -o $@ $<
+	$(CC) -o $@ $< ${CFLAGS}
+
+%.so: %.c
+	${CC} -o $@ $< ${CFLAGS} -shared -fPIC -ldl -Wall -Werror
 
