@@ -11,7 +11,7 @@
 
 #include "poissinv.h"
 
-#define CPUPASS 420
+#define CPUPASS 500	// about 1 us per pass with -O3 on z12-BC
 
 double runone(long *buf, int memsz, int memst, int *cursor, int cpulp, int verb) {
         int i, j;
