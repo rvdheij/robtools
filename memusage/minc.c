@@ -9,7 +9,7 @@
 #include <sys/mman.h>
 #include <glob.h>
 
-void onefile(char *s, unsigned long *totpgs, unsigned long *totcnt) {
+void onefile(const char *s, const int verb, unsigned long *totpgs, unsigned long *totcnt) {
 	struct stat fs;
 	void *fm;
 	unsigned char *mcvec;
@@ -34,22 +34,50 @@ void onefile(char *s, unsigned long *totpgs, unsigned long *totcnt) {
 	}
 	*totpgs += pgs;
 	*totcnt += cnt;
-	printf("%8d %8d %s\n", pgs, cnt, s);
+	if (verb) {
+		printf("%8d %8d %s\n", pgs, cnt, s);
+	}
 	free(mcvec);
 	munmap(fm, fs.st_size);
 	close(fd);
 }
 
+void usage() {
+	printf("'minc - Count cached pages for specified files\n");
+	printf("  -v  Verbose, number of blocks and cached blocks\n");
+	printf("  -h  Help\n");
+}
+
 int main(int argc, char *argv[]) {
 	int i;
 	unsigned long totpgs = 0, totcnt = 0;
-	if (argc<2) {
-		fprintf(stderr, "Missing file name\n");
-		exit(1);
+
+	int c;
+	int verb = 0;
+
+	opterr = 0;
+	while ((c = getopt(argc, argv, "hv")) != -1) {
+		switch (c) {
+		case 'h':
+			usage();
+			return 0;
+		case 'v': 
+			verb = 1;
+			break;
+		default:	
+			fprintf(stderr, "Unknown option: %c.\n", optopt);
+			break;
+		}
 	}
-	for (i = 1; i < argc; i++) {
-		onefile(argv[i], &totpgs, &totcnt);
+	if (verb) printf("  #pages  #cached\n");
+	
+	for (i = optind; i < argc; i++) {
+		onefile(argv[i], verb, &totpgs, &totcnt);
 	}
-	printf("%8d %8d %s\n", (unsigned) totpgs, (unsigned) totcnt, "Total");
+	if (verb) {
+		printf("%8d %8d %s\n", (unsigned) totpgs, (unsigned) totcnt, "[Total]");
+	} else {
+		printf("Total %8d blocks used, %8d cached\n", (unsigned) totpgs, (unsigned) totcnt);
+	}
 	return 0;
 }
