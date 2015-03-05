@@ -40,9 +40,6 @@ void flush(int fd) {
 	fstat(fd, &fs);
 	if (S_ISREG(fs.st_mode)) {
 	  rc = posix_fadvise(fd,0,0,POSIX_FADV_DONTNEED);
-//	  if ((rc==0) & (fs.st_blocks <= 112)) {
-//	    rc = posix_fadvise(fd,0,0,POSIX_FADV_DONTNEED);
-//	  }
 	  if (rc != 0) fprintf(stderr, "Failed fadvise %d rc=%d stat=%d\n", fd, rc, fs.st_mode);
 	}
 }
