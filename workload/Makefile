@@ -3,15 +3,15 @@ LIBS =
 INCLUDE = .
 
 CFLAGS:=-g -O3 -Wall -Werror
-# LDFLAGS = -lrt -lcrypto
+LDFLAGS = -lrt -lcrypto
 
-M:=poisson rmhwload
+M:=poisson rmhwload rmhrsa
 O:=poissinv.o
 
 all: ${M} 
 
 %.o: %.c
-	$(CC) -c $< ${CFLAGS}
+	$(CC) -c $< ${CFLAGS} ${LDFLAGS}
 
 %: %.c
-	$(CC) -o $@ $< ${CFLAGS} ${O}
+	$(CC) -o $@ $< ${CFLAGS} ${O} ${LDFLAGS}
