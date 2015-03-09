@@ -60,9 +60,10 @@ void thinksome(int think) {
 
 void doRSA(RSA *keypair, int pass, int think) {
 	char *clear = "The quick brown fox jumps over the lazy dog";
+	int msglen = RSA_size(keypair)-42 < strlen(clear) ? RSA_size(keypair)-42 : strlen(clear);
 	assert(RSA_size(keypair) - strlen(clear) >= 8);
 	char *crypt = malloc(RSA_size(keypair));
-	int crypt_len = RSA_public_encrypt((int) strlen(clear)+1,
+	int crypt_len = RSA_public_encrypt(msglen,
 				(unsigned char *) clear, 
 				(unsigned char *) crypt, 
 				keypair,
