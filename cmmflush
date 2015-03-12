@@ -30,10 +30,15 @@ memfree=`freenow`
 echo "`timenow` Now free $((memfree/1024))MB, released $(((memfree-oldfree)/1024))MB"
 
 # Compute new temporary setting for cmm_pages, divide KB's by 4
-# using a 95% threshold to avoid pushing too hard
+# using a 95% threshold to avoid pushing too hard.
 
 newcmm=$(((memfree-minfree*2)*95/400+basecmm))
 echo "`timenow` CMM base is $((basecmm/256))MB, target is $((newcmm/256))MB"
+
+# Set the cmm_pages and linger while the kernel frees up space
+# for the balloon. Also get out when the kernel has reduced the
+# cmm_pages since last check (which means it ran out of memory
+# and reclaimed some already.
 
 echo $newcmm > $psv/cmm_pages
 curcmm=$basecmm
@@ -46,6 +51,9 @@ while [ "$curcmm" -lt "$newcmm" ]; do
   fi
   echo "`timenow` CMM currently at $((curcmm/256))MB..."
 done
+
+# Now that all has been returned to z/VM via the diagnose calls,
+# restore cmm_pages to its previous value to let Linux grow again.
 
 echo $basecmm > $psv/cmm_pages
 echo "`timenow` Done! CMM base restored to $((basecmm/256))MB"
