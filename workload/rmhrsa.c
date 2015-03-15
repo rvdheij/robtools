@@ -49,12 +49,12 @@ void showerr(const char *typ) {
 	fprintf(stderr, "Error %s message: %s\n", typ, err);
 	free(err);
 }
-// Sleep for time (poisson distributed around specified mean in ms) 
+// Sleep for time (poisson distributed around specified mean in us) 
 void thinksome(int think) {
         struct timespec t1, t2;
 	think = poissinv(think);
-	t1.tv_sec = think / 1000;           		// full seconds
-	t1.tv_nsec = (long) (think % 1000) * 1000000L;  // rest in ns
+	t1.tv_sec = think / 1000000;           		// full seconds
+	t1.tv_nsec = (long) (think % 1000000) * 1000000L;  // rest in ns
 	nanosleep(&t1, &t2);
 }
 
@@ -102,7 +102,7 @@ int main (int argc, char **argv) {
 		case 'p':
 			pass = atoi(optarg);
 			break;
-		case 'd':
+		case 'd':			// Think time in us
 			think = atoi(optarg);
 			break;
                 case ':':
