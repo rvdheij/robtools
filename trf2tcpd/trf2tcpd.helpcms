@@ -1,0 +1,39 @@
+TRF2TCPD  Convert TCP/IP VM Packet Trace to Linux tcpdump format
+
+          Rob van der Heij                  Version 1.0    June 2005
+
+Since z/VM 4.4 the VM TCP/IP stack can produce a packet trace that is
+recorded in TRF files. The TRF2TCPD utility reads the TRF files and
+converts the contents to the format used by Linux tcpdump command. The
+tcpdump format (actually the libpcap format) is used by most Linux tools
+that show or analyse recorded packet traces (like tcpdump, tcptrace).
+There are even Windows utilities that handle this format (e.g. WinDump).
+Because the TRF2TCPD utility reads the TRF files, there is no need to run
+TRACERED and buffer the output of that somewhere on disk.
+
+You need at least CMS Pipelines 1.0111 sublevel B (May 2004) to run this
+program. The latest version of the CMS Pipelines Runtime Library can be
+downloaded from the CMS Pipelines Homepage at
+  http://vm.marist.edu/~pipeline
+Only the userid running this conversion program needs to have the new
+level of CMS Pipelines available. You do not have to install that level
+for all other users if you do not want to do so. In that case, it would
+be sufficient to download the PIPELINE MODULE from the CMS Pipelines
+Homepage and store it as NXPIPE MODULE on an accessed disk. Using the
+PICKPIPE utility (also from the CMS Pipelines Homepage) you can select
+the new level with
+  PICKPIPE test
+
+Usage:  TRF2TCPD spids fn ft fm
+Where:
+  spids      list of TRF spool file id's, separated by comma
+  fn ft fm   output file to be written
+
+The output file is then transferred in binary (e.g. via FTP) to Linux
+where the tcpdump command could be used to display a formatted trace:
+   tcpdump -rn <fn.ft>
+
+The tcpdump (and libpcap) are probably part of your Linux distribution.
+Another useful tool is tcptrace from http://www.tcptrace.org/
+
+
