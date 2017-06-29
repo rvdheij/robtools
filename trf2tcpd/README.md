@@ -34,5 +34,5 @@ TRACERED *trf* CMS *fname* TRACERED A
 ```
 You can convert this file with
 ```
-PIPE < *fname* TRACERED A | trc2tcpd | > *fname ftype fm*
+PIPE < *fname* TRACERED A | trc2tcpd | trf2tcpd | > *fname ftype fm*
 ```
