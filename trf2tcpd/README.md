@@ -1,4 +1,10 @@
-# TRF2TCPD - Convert VM TCP/IP Traces to pcap
+# TRF2TCPD - Convert VM TCP/IP Traces to libpcap
+
+VM TCP/IP traces can be converted to libpcap format that is
+popular in various tools like **tcpdump** and **tcptrace**
+to diagnose protocol issues and network performance problems.
+The **Wireshark** application (formerly **ethereal**) offers
+an elegant interface to analyze and decode the traffic.
 
 ## Packet Trace in TRF files
 Create the TRF files as described in *TCP/IP Diagnostics*
@@ -16,8 +22,9 @@ trsource ena id testcase
 After traffic has been captured, close the trace with
 ```
 trsource disa id testcase
+netstat obey traceonly endtraceonly
 ```
-and find the TRF file number with ```CP Q TRF``` so you can
+Find the TRF file number with ```CP Q TRF``` so you can
 process the data with
 ```
 TRF2TCPD *trf* *fname ftype fm*
@@ -36,3 +43,5 @@ You can convert this file with
 ```
 PIPE < *fname* TRACERED A | trc2tcpd | trf2tcpd | > *fname ftype fm*
 ```
+The result is similar to what ```TRF2TCPD``` would get out
+of the TRF file directly.
