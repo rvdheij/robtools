@@ -1,0 +1,109 @@
+=01
+:begin_set
+id          x  5.4
+
+=02
+:end_set
+id          x  5.4
+rc          d  9.4
+
+=03
+:enter_scanner
+id          x  5.4
+
+=04
+:vector_allocated
+id          x  5.4
+func        b 18.1
+flags       b 19.1
+name        p 49.8
+
+=05
+:leave_scanner
+id          x  5.4
+rc          d  9.4
+
+=06,00
+:scan_begin
+id          x  5.4
+pipe        u  9.4
+stage       u 13.4
+
+=06,01
+:scan_stage
+id          x  5.4
+pipe        u  9.4
+stage       u 13.4
+flags       b 20.1
+label       c 25.8
+streamid    x 33.4
+verb        p 41.8
+parm        p 49.8
+
+=06,02
+:scan_labelref
+id          x  5.4
+pipeline    u  9.4
+stage       u 13.4
+refid       x 21.4
+label       c 25.8
+streamid    x 33.4
+
+=06,03
+:scan_connect
+id          x  5.4
+pipeline    u  9.4
+stage       u 13.4
+flag        u 20.1
+streamid    x 21.4
+streamnum   u 25.4
+
+=08
+:start_stage
+id          x  5.4
+
+=09
+:end_stage
+id          x  5.4
+rc          d  9.4
+
+=fA
+:resume_stage
+id          x  5.4
+rc          d  9.4
+r0          x 13.4
+r1          x 17.4
+func        c 23.2
+
+=fB
+:dispatcher
+id          x  5.4
+r0          x 13.4
+r1          x 17.4
+func        c 23.2
+
+=0C
+:stalled
+id          x  5.4
+
+=0D
+:state
+id          x  5.4
+encode      x  9.4
+decode      x 13.4
+
+=0E
+:commit
+id          x  5.4
+rc          d  9.4
+level       d 13.4
+
+=12
+:subroutine_end
+id          x  5.4
+rc          d  9.4
+
+=13
+:caller_wait
+id          x  5.4
+refid       x  9.4

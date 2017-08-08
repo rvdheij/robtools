@@ -1,0 +1,6 @@
+B   str,mem,, c2b
+C   str,mem
+D   num,print
+U   num,print
+P   ptr,mem
+X   str,mem,, c2x
