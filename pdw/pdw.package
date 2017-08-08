@@ -1,0 +1,17 @@
+* :nick.PDW
+* :title.Pipedemo Web
+* :oname.Rob van der Heij               :onode.GDLVM7   :ouser.RVDHEIJ
+* :github.github.com/rvdheij/robtools/pdw
+*
+   PDW      README
+   PDWEB    EXEC
+   PDWFMTEV TXT
+   PDWMKFMT TXT
+   PDWPRCEV REXX
+   PDWMKRUN REXX
+   PDWRDSTR REXX
+   PDWFMTEV REXX
+   PDWMKFLD REXX
+   PDWMKFMT REXX
+   PDWSPAWN REXX
+   PDWSERVE REXX
